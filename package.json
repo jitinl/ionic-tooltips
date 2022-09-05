@@ -58,5 +58,8 @@
   "peerDependencies": {
     "ionic-angular": "^3.0.0",
     "@angular/animations": "*"
+  },
+  "volta": {
+    "node": "10.24.1"
   }
 }

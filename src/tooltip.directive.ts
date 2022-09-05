@@ -71,6 +71,25 @@ export class Tooltip implements OnInit, AfterViewInit, OnDestroy {
     return this._active;
   }
 
+  _show: boolean;
+  @Input()
+  set show(val: boolean) {
+    if ((typeof val) !== "boolean") {
+      this._show = undefined;
+      return;
+    }
+    this._show = (val === true);
+    if (val) {
+      this.showTooltip();
+    } else {
+      this.removeTooltip();
+    }
+  }
+  get show(): boolean {
+    return this._show;
+  }
+
+
   private _arrow: boolean = false;
   private _navTooltip: boolean = false;
   private tooltipElement: ComponentRef<TooltipBox>;
@@ -90,6 +109,9 @@ export class Tooltip implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     // Show the tooltip immediately after initiating view if set to
     if (this._active) {
+      this.trigger();
+    }
+    if (this.show) {
       this.trigger();
     }
   }
@@ -121,12 +143,19 @@ export class Tooltip implements OnInit, AfterViewInit, OnDestroy {
    * If a tooltip already exists, it will just reset it's timer.
    */
   trigger() {
-    if (!this.canShow) {
+    if (!this.canShow && this.show !== true) {
+      return;
+    }
+    if (this.show === false) {
       return;
     }
 
     if (this.tooltipElement) {
-      this._resetTimer();
+      if (this.show === true) {
+        clearTimeout(this.tooltipTimeout);
+      } else {
+        this._resetTimer();  
+      }
     } else {
       this.showTooltip();
     }
@@ -136,7 +165,15 @@ export class Tooltip implements OnInit, AfterViewInit, OnDestroy {
    * Creates a new tooltip component and adjusts it's properties to show properly.
    */
   showTooltip() {
-    this._createTooltipComponent();
+    if (this.show === false) {
+      return;
+    }
+    if (this.show && this.tooltipElement) {
+      return;
+    }
+    if (!this.tooltipElement) {
+      this._createTooltipComponent();
+    }
 
     const tooltipComponent: TooltipBox = this.tooltipElement.instance;
 
@@ -164,7 +201,7 @@ export class Tooltip implements OnInit, AfterViewInit, OnDestroy {
         tooltipComponent.arrow = arrowPosition;
       }
 
-      if (!this._active) {
+      if (!this._active && !this.show) {
         this.tooltipTimeout = setTimeout(
           this.removeTooltip.bind(this),
           this.duration,
@@ -276,6 +313,9 @@ export class Tooltip implements OnInit, AfterViewInit, OnDestroy {
   }
 
    removeTooltip() {
+     if (this.show) {
+       return;
+     }
     if (!this.tooltipElement) {
       this.tooltipElement = undefined;
       this.tooltipTimeout = undefined;
