@@ -72,6 +72,7 @@ export class Tooltip implements OnInit, AfterViewInit, OnDestroy {
   }
 
   _show: boolean;
+
   @Input()
   set show(val: boolean) {
     if ((typeof val) !== "boolean") {
@@ -85,8 +86,22 @@ export class Tooltip implements OnInit, AfterViewInit, OnDestroy {
       this.removeTooltip();
     }
   }
+
   get show(): boolean {
     return this._show;
+  }
+
+  @Input()
+  set alwaysShow(val: boolean) {
+    if (val === true) {
+      this.show = true;
+    } else {
+      this.show = undefined;
+    }
+  }
+
+  get alwaysShow(): boolean {
+    return this.show === true;
   }
 
 
