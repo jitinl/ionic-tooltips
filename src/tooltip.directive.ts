@@ -23,6 +23,8 @@ export class Tooltip implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() tooltipHtml: string;
 
+  @Input() tooltipClass: string;
+
   @Input() tooltip: string;
 
   @Input() positionV: string;
@@ -194,6 +196,7 @@ export class Tooltip implements OnInit, AfterViewInit, OnDestroy {
 
     tooltipComponent.text = this.tooltip;
     tooltipComponent.tooltipHtml = this.tooltipHtml;
+    tooltipComponent.tooltipClass = this.tooltipClass;
     tooltipComponent.init.then(() => {
       const tooltipPosition = this._getTooltipPosition();
 

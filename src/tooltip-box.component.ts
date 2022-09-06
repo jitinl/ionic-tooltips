@@ -54,13 +54,14 @@ export class TooltipBox implements AfterViewInit {
 
   @Input() text: string;
   @Input() tooltipHtml: string;
+  @Input() tooltipClass: string;
 
   @Input()
   set arrow(side: string) {
     this.rnd.setAttribute(
       this.getNativeElement(),
       'class',
-      'has-arrow ' + 'arrow-' + side,
+      'has-arrow ' + 'arrow-' + side + " " + this.tooltipClass,
     );
   }
 
