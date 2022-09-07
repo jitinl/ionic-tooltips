@@ -25,7 +25,14 @@ export class Tooltip implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() tooltipClass: string;
 
-  @Input() tooltip: string;
+  _tooltip: string
+  @Input()
+  get tooltip(): string {
+    return this._tooltip
+  };
+  set tooltip(s: string) {
+    this._tooltip = s;
+  }
 
   @Input() positionV: string;
 
@@ -76,8 +83,13 @@ export class Tooltip implements OnInit, AfterViewInit, OnDestroy {
   _show: boolean;
 
   @Input()
-  set show(val: boolean) {
+  set show(val: boolean) {      
+
     if ((typeof val) !== "boolean") {
+      if (this.show === true) {
+        this._show = undefined;
+        this.removeTooltip();
+      }
       this._show = undefined;
       return;
     }
@@ -368,6 +380,7 @@ export class Tooltip implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy() {
     // if the timer hasn't expired or active is true when the component gets destroyed, the tooltip will remain in the DOM
     // this removes it
+    this.show = false;
     this.removeTooltip();
   }
 }
