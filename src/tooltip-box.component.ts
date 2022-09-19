@@ -2,6 +2,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   HostBinding,
@@ -50,7 +51,13 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TooltipBox implements AfterViewInit {
-  @HostBinding('@fade') fadeState: string = 'invisible';
+  _fadeState: string = "invisible"
+  @HostBinding('@fade') get fadeState(): string {
+    return this._fadeState
+  }
+  set fadeState(val: string) {
+    setTimeout(() => { this._fadeState = val; });
+  }
 
   @Input() text: string;
   @Input() tooltipHtml: string;
@@ -83,7 +90,7 @@ export class TooltipBox implements AfterViewInit {
 
   private initResolve: Function;
 
-  constructor(public elementRef: ElementRef, private rnd: Renderer2) {
+  constructor(public elementRef: ElementRef, private rnd: Renderer2, private cdr: ChangeDetectorRef) {
     this.init = new Promise<void>(resolve => {
       this.initResolve = resolve;
     });

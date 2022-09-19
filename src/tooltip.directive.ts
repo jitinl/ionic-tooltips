@@ -1,12 +1,14 @@
 import {
   AfterViewInit,
   ApplicationRef,
+  ChangeDetectorRef,
   ComponentFactoryResolver,
   ComponentRef,
   Directive,
   ElementRef,
   HostListener,
   Input,
+  NgZone,
   OnDestroy,
   OnInit,
   ViewContainerRef,
@@ -131,7 +133,8 @@ export class Tooltip implements OnInit, AfterViewInit, OnDestroy {
     private appRef: ApplicationRef,
     private platform: Platform,
     private _componentFactoryResolver: ComponentFactoryResolver,
-    private tooltipCtrl: TooltipController
+    private tooltipCtrl: TooltipController,
+    private cdr: ChangeDetectorRef
   ) {
   }
 
@@ -352,7 +355,11 @@ export class Tooltip implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    this.tooltipElement.instance.fadeState = 'invisible';
+
+
+     this.tooltipElement.instance.fadeState = 'invisible';
+
+    //  this.cdr.detectChanges();
 
     this.canShow = false;
 
