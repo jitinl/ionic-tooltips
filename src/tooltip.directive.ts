@@ -1,4 +1,5 @@
 import {
+  AfterContentInit,
   AfterViewInit,
   ApplicationRef,
   ChangeDetectorRef,
@@ -21,7 +22,7 @@ import { TooltipController } from './tooltip.cotroller';
 @Directive({
   selector: '[tooltip]',
 })
-export class Tooltip implements OnInit, AfterViewInit, OnDestroy {
+export class Tooltip implements OnInit, AfterContentInit, OnDestroy {
 
   @Input() tooltipHtml: string;
 
@@ -138,7 +139,7 @@ export class Tooltip implements OnInit, AfterViewInit, OnDestroy {
   ) {
   }
 
-  ngAfterViewInit() {
+  ngAfterContentInit() {
     // Show the tooltip immediately after initiating view if set to
     if (this._active) {
       this.trigger();
@@ -197,6 +198,10 @@ export class Tooltip implements OnInit, AfterViewInit, OnDestroy {
    * Creates a new tooltip component and adjusts it's properties to show properly.
    */
   showTooltip() {
+    setTimeout(() => this._showTooltip());
+  }
+
+  _showTooltip() {
     if (this.show === false) {
       return;
     }
@@ -277,7 +282,6 @@ export class Tooltip implements OnInit, AfterViewInit, OnDestroy {
       componentFactory = this._componentFactoryResolver.resolveComponentFactory(
         TooltipBox,
       );
-
     this.tooltipElement = viewport.createComponent(componentFactory);
     this.tooltipCtrl.addTooltip(this);
   }

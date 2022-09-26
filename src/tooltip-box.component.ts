@@ -1,5 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
+  AfterContentInit,
   AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -50,7 +51,7 @@ import {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TooltipBox implements AfterViewInit {
+export class TooltipBox implements AfterContentInit {
   _fadeState: string = "invisible"
   @HostBinding('@fade') get fadeState(): string {
     return this._fadeState
@@ -96,7 +97,7 @@ export class TooltipBox implements AfterViewInit {
     });
   }
 
-  ngAfterViewInit() {
+  ngAfterContentInit() {
     this.initResolve();
   }
 }
